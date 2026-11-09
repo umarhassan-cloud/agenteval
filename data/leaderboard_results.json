@@ -1,0 +1,2867 @@
+{
+  "meta": {
+    "agenteval_version": "0.1.0",
+    "n_tasks": 20,
+    "domains": [
+      "booking",
+      "coding",
+      "support"
+    ],
+    "ks": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "classifier": "failure taxonomy via hybrid classifier",
+    "simulated": true,
+    "trials": 5,
+    "max_steps": 20
+  },
+  "tasks": [
+    {
+      "id": "booking-001",
+      "domain": "booking",
+      "title": "Look up flight time for an existing reservation",
+      "difficulty": "easy",
+      "policy_tags": [],
+      "num_reference_steps": 1
+    },
+    {
+      "id": "booking-002",
+      "domain": "booking",
+      "title": "Book cheapest available economy seat (cheapest fare is sold out)",
+      "difficulty": "medium",
+      "policy_tags": [],
+      "num_reference_steps": 2
+    },
+    {
+      "id": "booking-003",
+      "domain": "booking",
+      "title": "Refuse to change a basic economy reservation",
+      "difficulty": "medium",
+      "policy_tags": [
+        "NO_BASIC_ECONOMY_CHANGES"
+      ],
+      "num_reference_steps": 1
+    },
+    {
+      "id": "booking-004",
+      "domain": "booking",
+      "title": "Cancel a reservation booked within 24 hours",
+      "difficulty": "easy",
+      "policy_tags": [
+        "CANCELLATION_ELIGIBILITY"
+      ],
+      "num_reference_steps": 2
+    },
+    {
+      "id": "booking-005",
+      "domain": "booking",
+      "title": "Refuse cancellation of a non-refundable reservation",
+      "difficulty": "medium",
+      "policy_tags": [
+        "CANCELLATION_ELIGIBILITY"
+      ],
+      "num_reference_steps": 2
+    },
+    {
+      "id": "booking-006",
+      "domain": "booking",
+      "title": "Change flight date and add a hotel stay",
+      "difficulty": "hard",
+      "policy_tags": [],
+      "num_reference_steps": 5
+    },
+    {
+      "id": "booking-007",
+      "domain": "booking",
+      "title": "Book business seats for two plus a hotel with availability",
+      "difficulty": "hard",
+      "policy_tags": [],
+      "num_reference_steps": 4
+    },
+    {
+      "id": "support-001",
+      "domain": "support",
+      "title": "Refund a damaged item within the refund window",
+      "difficulty": "easy",
+      "policy_tags": [
+        "AUTH_REQUIRED",
+        "REFUND_WINDOW"
+      ],
+      "num_reference_steps": 3
+    },
+    {
+      "id": "support-002",
+      "domain": "support",
+      "title": "Refuse a refund outside the 30-day window",
+      "difficulty": "medium",
+      "policy_tags": [
+        "REFUND_WINDOW"
+      ],
+      "num_reference_steps": 2
+    },
+    {
+      "id": "support-003",
+      "domain": "support",
+      "title": "Escalate a refund above the $500 approval limit",
+      "difficulty": "hard",
+      "policy_tags": [
+        "REFUND_LIMIT"
+      ],
+      "num_reference_steps": 4
+    },
+    {
+      "id": "support-004",
+      "domain": "support",
+      "title": "Update shipping address on a processing order",
+      "difficulty": "medium",
+      "policy_tags": [
+        "AUTH_REQUIRED"
+      ],
+      "num_reference_steps": 3
+    },
+    {
+      "id": "support-005",
+      "domain": "support",
+      "title": "Explain that a shipped order cannot be cancelled",
+      "difficulty": "medium",
+      "policy_tags": [
+        "AUTH_REQUIRED"
+      ],
+      "num_reference_steps": 2
+    },
+    {
+      "id": "support-006",
+      "domain": "support",
+      "title": "Refund one order and escalate a delayed-delivery ticket",
+      "difficulty": "hard",
+      "policy_tags": [
+        "AUTH_REQUIRED",
+        "REFUND_WINDOW"
+      ],
+      "num_reference_steps": 5
+    },
+    {
+      "id": "support-007",
+      "domain": "support",
+      "title": "Cancel a processing order",
+      "difficulty": "medium",
+      "policy_tags": [
+        "AUTH_REQUIRED"
+      ],
+      "num_reference_steps": 3
+    },
+    {
+      "id": "coding-001",
+      "domain": "coding",
+      "title": "Fix slugify casing and trailing hyphens",
+      "difficulty": "easy",
+      "policy_tags": [
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 5
+    },
+    {
+      "id": "coding-002",
+      "domain": "coding",
+      "title": "Implement median()",
+      "difficulty": "easy",
+      "policy_tags": [
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 4
+    },
+    {
+      "id": "coding-003",
+      "domain": "coding",
+      "title": "Fix two off-by-one bugs in pagination",
+      "difficulty": "medium",
+      "policy_tags": [
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 5
+    },
+    {
+      "id": "coding-004",
+      "domain": "coding",
+      "title": "Fix duration parsing and reject invalid input",
+      "difficulty": "medium",
+      "policy_tags": [
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 4
+    },
+    {
+      "id": "coding-005",
+      "domain": "coding",
+      "title": "Locate and fix is_palindrome",
+      "difficulty": "medium",
+      "policy_tags": [
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 4
+    },
+    {
+      "id": "coding-006",
+      "domain": "coding",
+      "title": "Fix percentage discount without touching tests",
+      "difficulty": "hard",
+      "policy_tags": [
+        "PROTECTED_TESTS",
+        "RUN_TESTS"
+      ],
+      "num_reference_steps": 4
+    }
+  ],
+  "entries": [
+    {
+      "id": "claude-style/react",
+      "model": "claude-style",
+      "agent": "react",
+      "display_name": "Claude-style + ReAct",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.79,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.79,
+            "ci_low": 0.7297,
+            "ci_high": 0.86
+          },
+          "2": {
+            "value": 0.615,
+            "ci_low": 0.495,
+            "ci_high": 0.74
+          },
+          "3": {
+            "value": 0.475,
+            "ci_low": 0.325,
+            "ci_high": 0.64
+          },
+          "4": {
+            "value": 0.37,
+            "ci_low": 0.18,
+            "ci_high": 0.56
+          },
+          "5": {
+            "value": 0.3,
+            "ci_low": 0.1,
+            "ci_high": 0.5
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.79,
+            "ci_low": 0.73,
+            "ci_high": 0.86
+          },
+          "2": {
+            "value": 0.965,
+            "ci_low": 0.945,
+            "ci_high": 0.985
+          },
+          "3": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          },
+          "4": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.25,
+        "avg_tokens": 4380.0,
+        "policy_violation_rate": 0.09
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.8,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.8,
+              "ci_low": 0.6857,
+              "ci_high": 0.9143
+            },
+            "2": {
+              "value": 0.6286,
+              "ci_low": 0.4707,
+              "ci_high": 0.8286
+            },
+            "3": {
+              "value": 0.4857,
+              "ci_low": 0.2286,
+              "ci_high": 0.7429
+            },
+            "4": {
+              "value": 0.3714,
+              "ci_low": 0.1143,
+              "ci_high": 0.7143
+            },
+            "5": {
+              "value": 0.2857,
+              "ci_low": 0.0,
+              "ci_high": 0.5714
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.8,
+              "ci_low": 0.6857,
+              "ci_high": 0.9143
+            },
+            "2": {
+              "value": 0.9714,
+              "ci_low": 0.9429,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.31,
+          "avg_tokens": 3864.5,
+          "policy_violation_rate": 0.0571
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.8667,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.8667,
+              "ci_low": 0.7333,
+              "ci_high": 0.9667
+            },
+            "2": {
+              "value": 0.75,
+              "ci_low": 0.5167,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 0.65,
+              "ci_low": 0.35,
+              "ci_high": 0.9
+            },
+            "4": {
+              "value": 0.5667,
+              "ci_low": 0.2333,
+              "ci_high": 0.8667
+            },
+            "5": {
+              "value": 0.5,
+              "ci_low": 0.1667,
+              "ci_high": 0.8333
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.8667,
+              "ci_low": 0.7333,
+              "ci_high": 0.9667
+            },
+            "2": {
+              "value": 0.9833,
+              "ci_low": 0.95,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.3,
+          "avg_tokens": 4412.1,
+          "policy_violation_rate": 0.0667
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.7143,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.7143,
+              "ci_low": 0.6286,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.4857,
+              "ci_low": 0.3429,
+              "ci_high": 0.6857
+            },
+            "3": {
+              "value": 0.3143,
+              "ci_low": 0.1429,
+              "ci_high": 0.5714
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0286,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.7143,
+              "ci_low": 0.6286,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.9429,
+              "ci_low": 0.9143,
+              "ci_high": 0.9714
+            },
+            "3": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.29,
+          "avg_tokens": 4868.1,
+          "policy_violation_rate": 0.1429
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 79,
+        "IGNORED_POLICY": 9,
+        "LOOPING": 0,
+        "GAVE_UP_EARLY": 5,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 5,
+        "PARTIAL_SUCCESS": 1,
+        "WRONG_STATE": 0
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.8,
+        "booking-003": 0.8,
+        "booking-004": 1.0,
+        "booking-005": 0.6,
+        "booking-006": 0.6,
+        "booking-007": 0.8,
+        "coding-001": 1.0,
+        "coding-002": 1.0,
+        "coding-003": 1.0,
+        "coding-004": 0.8,
+        "coding-005": 0.8,
+        "coding-006": 0.6,
+        "support-001": 1.0,
+        "support-002": 0.6,
+        "support-003": 0.6,
+        "support-004": 0.6,
+        "support-005": 0.8,
+        "support-006": 0.8,
+        "support-007": 0.6
+      },
+      "rank": 1
+    },
+    {
+      "id": "gpt-4o-style/react",
+      "model": "gpt-4o-style",
+      "agent": "react",
+      "display_name": "GPT-4o-style + ReAct",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.72,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.72,
+            "ci_low": 0.5998,
+            "ci_high": 0.83
+          },
+          "2": {
+            "value": 0.55,
+            "ci_low": 0.395,
+            "ci_high": 0.7001
+          },
+          "3": {
+            "value": 0.44,
+            "ci_low": 0.27,
+            "ci_high": 0.6201
+          },
+          "4": {
+            "value": 0.36,
+            "ci_low": 0.17,
+            "ci_high": 0.56
+          },
+          "5": {
+            "value": 0.3,
+            "ci_low": 0.1,
+            "ci_high": 0.5
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.72,
+            "ci_low": 0.6,
+            "ci_high": 0.83
+          },
+          "2": {
+            "value": 0.89,
+            "ci_low": 0.8,
+            "ci_high": 0.96
+          },
+          "3": {
+            "value": 0.95,
+            "ci_low": 0.89,
+            "ci_high": 0.995
+          },
+          "4": {
+            "value": 0.98,
+            "ci_low": 0.95,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.34,
+        "avg_tokens": 4462.2,
+        "policy_violation_rate": 0.1
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.8,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.8,
+              "ci_low": 0.6857,
+              "ci_high": 0.9143
+            },
+            "2": {
+              "value": 0.6286,
+              "ci_low": 0.4707,
+              "ci_high": 0.8286
+            },
+            "3": {
+              "value": 0.4857,
+              "ci_low": 0.2286,
+              "ci_high": 0.7429
+            },
+            "4": {
+              "value": 0.3714,
+              "ci_low": 0.1143,
+              "ci_high": 0.7143
+            },
+            "5": {
+              "value": 0.2857,
+              "ci_low": 0.0,
+              "ci_high": 0.5714
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.8,
+              "ci_low": 0.6857,
+              "ci_high": 0.9143
+            },
+            "2": {
+              "value": 0.9714,
+              "ci_low": 0.9429,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.57,
+          "avg_tokens": 4217.7,
+          "policy_violation_rate": 0.0286
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.5667,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.5667,
+              "ci_low": 0.3667,
+              "ci_high": 0.7675
+            },
+            "2": {
+              "value": 0.35,
+              "ci_low": 0.1,
+              "ci_high": 0.6333
+            },
+            "3": {
+              "value": 0.25,
+              "ci_low": 0.0167,
+              "ci_high": 0.5667
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0,
+              "ci_high": 0.5333
+            },
+            "5": {
+              "value": 0.1667,
+              "ci_low": 0.0,
+              "ci_high": 0.5
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.5667,
+              "ci_low": 0.3667,
+              "ci_high": 0.7667
+            },
+            "2": {
+              "value": 0.7833,
+              "ci_low": 0.6,
+              "ci_high": 0.9333
+            },
+            "3": {
+              "value": 0.9,
+              "ci_low": 0.7833,
+              "ci_high": 0.9833
+            },
+            "4": {
+              "value": 0.9667,
+              "ci_low": 0.9,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.3,
+          "avg_tokens": 4388.8,
+          "policy_violation_rate": 0.1667
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.7714,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.7714,
+              "ci_low": 0.5429,
+              "ci_high": 0.9429
+            },
+            "2": {
+              "value": 0.6429,
+              "ci_low": 0.3571,
+              "ci_high": 0.8857
+            },
+            "3": {
+              "value": 0.5571,
+              "ci_low": 0.2571,
+              "ci_high": 0.8293
+            },
+            "4": {
+              "value": 0.4857,
+              "ci_low": 0.2,
+              "ci_high": 0.8571
+            },
+            "5": {
+              "value": 0.4286,
+              "ci_low": 0.0,
+              "ci_high": 0.7143
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.7714,
+              "ci_low": 0.5714,
+              "ci_high": 0.9429
+            },
+            "2": {
+              "value": 0.9,
+              "ci_low": 0.7286,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 0.9429,
+              "ci_low": 0.8286,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 0.9714,
+              "ci_low": 0.9143,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.29,
+          "avg_tokens": 4769.7,
+          "policy_violation_rate": 0.1143
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 72,
+        "IGNORED_POLICY": 10,
+        "LOOPING": 0,
+        "GAVE_UP_EARLY": 3,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 2,
+        "HALLUCINATED_FACT": 9,
+        "PARTIAL_SUCCESS": 4,
+        "WRONG_STATE": 0
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.8,
+        "booking-003": 0.8,
+        "booking-004": 1.0,
+        "booking-005": 0.6,
+        "booking-006": 0.6,
+        "booking-007": 0.8,
+        "coding-001": 1.0,
+        "coding-002": 0.2,
+        "coding-003": 0.4,
+        "coding-004": 0.6,
+        "coding-005": 0.8,
+        "coding-006": 0.4,
+        "support-001": 1.0,
+        "support-002": 0.6,
+        "support-003": 0.2,
+        "support-004": 0.8,
+        "support-005": 1.0,
+        "support-006": 1.0,
+        "support-007": 0.8
+      },
+      "rank": 2
+    },
+    {
+      "id": "gpt-4o-style/planact",
+      "model": "gpt-4o-style",
+      "agent": "planact",
+      "display_name": "GPT-4o-style + Plan-then-Act",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.68,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.68,
+            "ci_low": 0.59,
+            "ci_high": 0.77
+          },
+          "2": {
+            "value": 0.465,
+            "ci_low": 0.345,
+            "ci_high": 0.595
+          },
+          "3": {
+            "value": 0.32,
+            "ci_low": 0.185,
+            "ci_high": 0.48
+          },
+          "4": {
+            "value": 0.22,
+            "ci_low": 0.08,
+            "ci_high": 0.3802
+          },
+          "5": {
+            "value": 0.15,
+            "ci_low": 0.0,
+            "ci_high": 0.35
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.68,
+            "ci_low": 0.5998,
+            "ci_high": 0.77
+          },
+          "2": {
+            "value": 0.895,
+            "ci_low": 0.825,
+            "ci_high": 0.955
+          },
+          "3": {
+            "value": 0.965,
+            "ci_low": 0.92,
+            "ci_high": 0.995
+          },
+          "4": {
+            "value": 0.99,
+            "ci_low": 0.97,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.13,
+        "avg_tokens": 4640.3,
+        "policy_violation_rate": 0.12
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6857,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6857,
+              "ci_low": 0.5143,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.4714,
+              "ci_low": 0.2568,
+              "ci_high": 0.7
+            },
+            "3": {
+              "value": 0.3286,
+              "ci_low": 0.1286,
+              "ci_high": 0.6
+            },
+            "4": {
+              "value": 0.2286,
+              "ci_low": 0.0571,
+              "ci_high": 0.5143
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6857,
+              "ci_low": 0.5429,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.9,
+              "ci_low": 0.7857,
+              "ci_high": 0.9857
+            },
+            "3": {
+              "value": 0.9714,
+              "ci_low": 0.9286,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.54,
+          "avg_tokens": 4560.3,
+          "policy_violation_rate": 0.1429
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.7333,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.7333,
+              "ci_low": 0.6333,
+              "ci_high": 0.8667
+            },
+            "2": {
+              "value": 0.5167,
+              "ci_low": 0.35,
+              "ci_high": 0.7333
+            },
+            "3": {
+              "value": 0.35,
+              "ci_low": 0.15,
+              "ci_high": 0.65
+            },
+            "4": {
+              "value": 0.2333,
+              "ci_low": 0.0333,
+              "ci_high": 0.5667
+            },
+            "5": {
+              "value": 0.1667,
+              "ci_low": 0.0,
+              "ci_high": 0.5
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.7333,
+              "ci_low": 0.6333,
+              "ci_high": 0.8333
+            },
+            "2": {
+              "value": 0.95,
+              "ci_low": 0.9167,
+              "ci_high": 0.9833
+            },
+            "3": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.03,
+          "avg_tokens": 4479.2,
+          "policy_violation_rate": 0.0333
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6286,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4286,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.4143,
+              "ci_low": 0.1857,
+              "ci_high": 0.6429
+            },
+            "3": {
+              "value": 0.2857,
+              "ci_low": 0.0714,
+              "ci_high": 0.5571
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0286,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4286,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.8429,
+              "ci_low": 0.6714,
+              "ci_high": 0.9714
+            },
+            "3": {
+              "value": 0.9286,
+              "ci_low": 0.8143,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 0.9714,
+              "ci_low": 0.9143,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.94,
+          "avg_tokens": 4858.5,
+          "policy_violation_rate": 0.1714
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 68,
+        "IGNORED_POLICY": 12,
+        "LOOPING": 0,
+        "GAVE_UP_EARLY": 5,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 2,
+        "HALLUCINATED_FACT": 7,
+        "PARTIAL_SUCCESS": 4,
+        "WRONG_STATE": 2
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.8,
+        "booking-003": 0.4,
+        "booking-004": 0.8,
+        "booking-005": 0.6,
+        "booking-006": 0.4,
+        "booking-007": 0.8,
+        "coding-001": 1.0,
+        "coding-002": 0.8,
+        "coding-003": 0.6,
+        "coding-004": 0.6,
+        "coding-005": 0.8,
+        "coding-006": 0.6,
+        "support-001": 0.4,
+        "support-002": 0.8,
+        "support-003": 0.6,
+        "support-004": 0.6,
+        "support-005": 1.0,
+        "support-006": 0.8,
+        "support-007": 0.2
+      },
+      "rank": 3
+    },
+    {
+      "id": "claude-style/planact",
+      "model": "claude-style",
+      "agent": "planact",
+      "display_name": "Claude-style + Plan-then-Act",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.63,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.63,
+            "ci_low": 0.52,
+            "ci_high": 0.72
+          },
+          "2": {
+            "value": 0.41,
+            "ci_low": 0.2949,
+            "ci_high": 0.5301
+          },
+          "3": {
+            "value": 0.26,
+            "ci_low": 0.145,
+            "ci_high": 0.395
+          },
+          "4": {
+            "value": 0.16,
+            "ci_low": 0.05,
+            "ci_high": 0.3
+          },
+          "5": {
+            "value": 0.1,
+            "ci_low": 0.0,
+            "ci_high": 0.25
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.63,
+            "ci_low": 0.5198,
+            "ci_high": 0.73
+          },
+          "2": {
+            "value": 0.85,
+            "ci_low": 0.735,
+            "ci_high": 0.94
+          },
+          "3": {
+            "value": 0.92,
+            "ci_low": 0.8,
+            "ci_high": 0.995
+          },
+          "4": {
+            "value": 0.94,
+            "ci_low": 0.83,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 0.95,
+            "ci_low": 0.85,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 3.86,
+        "avg_tokens": 4290.8,
+        "policy_violation_rate": 0.09
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6857,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6857,
+              "ci_low": 0.5429,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.4571,
+              "ci_low": 0.2714,
+              "ci_high": 0.6571
+            },
+            "3": {
+              "value": 0.3,
+              "ci_low": 0.1,
+              "ci_high": 0.5575
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0286,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6857,
+              "ci_low": 0.5429,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.9143,
+              "ci_low": 0.8286,
+              "ci_high": 0.9714
+            },
+            "3": {
+              "value": 0.9857,
+              "ci_low": 0.9571,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.37,
+          "avg_tokens": 4318.1,
+          "policy_violation_rate": 0.0857
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.6333,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6333,
+              "ci_low": 0.5333,
+              "ci_high": 0.7333
+            },
+            "2": {
+              "value": 0.3667,
+              "ci_low": 0.2333,
+              "ci_high": 0.5
+            },
+            "3": {
+              "value": 0.1833,
+              "ci_low": 0.0667,
+              "ci_high": 0.3
+            },
+            "4": {
+              "value": 0.0667,
+              "ci_low": 0.0,
+              "ci_high": 0.1333
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6333,
+              "ci_low": 0.5325,
+              "ci_high": 0.7333
+            },
+            "2": {
+              "value": 0.9,
+              "ci_low": 0.8167,
+              "ci_high": 0.9667
+            },
+            "3": {
+              "value": 0.9833,
+              "ci_low": 0.95,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.97,
+          "avg_tokens": 4516.0,
+          "policy_violation_rate": 0.0
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.5714,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.5714,
+              "ci_low": 0.3421,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.4,
+              "ci_low": 0.1714,
+              "ci_high": 0.6714
+            },
+            "3": {
+              "value": 0.2857,
+              "ci_low": 0.0714,
+              "ci_high": 0.5714
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0286,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.5714,
+              "ci_low": 0.3143,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.7429,
+              "ci_low": 0.4429,
+              "ci_high": 0.9714
+            },
+            "3": {
+              "value": 0.8,
+              "ci_low": 0.5143,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 0.8286,
+              "ci_low": 0.5429,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 0.8571,
+              "ci_low": 0.5714,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.4,
+          "avg_tokens": 4070.4,
+          "policy_violation_rate": 0.1714
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 63,
+        "IGNORED_POLICY": 9,
+        "LOOPING": 3,
+        "GAVE_UP_EARLY": 10,
+        "WRONG_TOOL": 2,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 8,
+        "PARTIAL_SUCCESS": 4,
+        "WRONG_STATE": 0
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.8,
+        "booking-003": 0.4,
+        "booking-004": 0.6,
+        "booking-005": 0.8,
+        "booking-006": 0.6,
+        "booking-007": 0.6,
+        "coding-001": 0.8,
+        "coding-002": 0.6,
+        "coding-003": 0.4,
+        "coding-004": 0.8,
+        "coding-005": 0.6,
+        "coding-006": 0.6,
+        "support-001": 0.6,
+        "support-002": 1.0,
+        "support-003": 0.8,
+        "support-004": 0.6,
+        "support-005": 0.8,
+        "support-006": 0.2,
+        "support-007": 0.0
+      },
+      "rank": 4
+    },
+    {
+      "id": "llama-70b-style/planact",
+      "model": "llama-70b-style",
+      "agent": "planact",
+      "display_name": "Llama-3-70B-style + Plan-then-Act",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.53,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.53,
+            "ci_low": 0.4,
+            "ci_high": 0.66
+          },
+          "2": {
+            "value": 0.33,
+            "ci_low": 0.1899,
+            "ci_high": 0.4801
+          },
+          "3": {
+            "value": 0.24,
+            "ci_low": 0.095,
+            "ci_high": 0.405
+          },
+          "4": {
+            "value": 0.19,
+            "ci_low": 0.05,
+            "ci_high": 0.35
+          },
+          "5": {
+            "value": 0.15,
+            "ci_low": 0.0,
+            "ci_high": 0.3
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.53,
+            "ci_low": 0.4098,
+            "ci_high": 0.66
+          },
+          "2": {
+            "value": 0.73,
+            "ci_low": 0.605,
+            "ci_high": 0.8401
+          },
+          "3": {
+            "value": 0.84,
+            "ci_low": 0.72,
+            "ci_high": 0.935
+          },
+          "4": {
+            "value": 0.91,
+            "ci_low": 0.8098,
+            "ci_high": 0.98
+          },
+          "5": {
+            "value": 0.95,
+            "ci_low": 0.85,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.15,
+        "avg_tokens": 4877.8,
+        "policy_violation_rate": 0.13
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.7714,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.7714,
+              "ci_low": 0.6286,
+              "ci_high": 0.9143
+            },
+            "2": {
+              "value": 0.6,
+              "ci_low": 0.3571,
+              "ci_high": 0.8286
+            },
+            "3": {
+              "value": 0.4714,
+              "ci_low": 0.2143,
+              "ci_high": 0.7429
+            },
+            "4": {
+              "value": 0.3714,
+              "ci_low": 0.1136,
+              "ci_high": 0.6571
+            },
+            "5": {
+              "value": 0.2857,
+              "ci_low": 0.0,
+              "ci_high": 0.5714
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.7714,
+              "ci_low": 0.6286,
+              "ci_high": 0.8857
+            },
+            "2": {
+              "value": 0.9429,
+              "ci_low": 0.8571,
+              "ci_high": 1.0
+            },
+            "3": {
+              "value": 0.9857,
+              "ci_low": 0.9571,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.51,
+          "avg_tokens": 4670.9,
+          "policy_violation_rate": 0.0286
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.5,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.5,
+              "ci_low": 0.2,
+              "ci_high": 0.7667
+            },
+            "2": {
+              "value": 0.3333,
+              "ci_low": 0.0667,
+              "ci_high": 0.65
+            },
+            "3": {
+              "value": 0.25,
+              "ci_low": 0.0167,
+              "ci_high": 0.5671
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0,
+              "ci_high": 0.5333
+            },
+            "5": {
+              "value": 0.1667,
+              "ci_low": 0.0,
+              "ci_high": 0.5
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.5,
+              "ci_low": 0.2333,
+              "ci_high": 0.7667
+            },
+            "2": {
+              "value": 0.6667,
+              "ci_low": 0.3833,
+              "ci_high": 0.9167
+            },
+            "3": {
+              "value": 0.75,
+              "ci_low": 0.4167,
+              "ci_high": 0.9833
+            },
+            "4": {
+              "value": 0.8,
+              "ci_low": 0.4667,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 0.8333,
+              "ci_low": 0.5,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.77,
+          "avg_tokens": 4414.0,
+          "policy_violation_rate": 0.1333
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.3143,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.3143,
+              "ci_low": 0.2571,
+              "ci_high": 0.3714
+            },
+            "2": {
+              "value": 0.0571,
+              "ci_low": 0.0143,
+              "ci_high": 0.0857
+            },
+            "3": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            },
+            "4": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.3143,
+              "ci_low": 0.2286,
+              "ci_high": 0.3714
+            },
+            "2": {
+              "value": 0.5714,
+              "ci_low": 0.4429,
+              "ci_high": 0.6571
+            },
+            "3": {
+              "value": 0.7714,
+              "ci_low": 0.6429,
+              "ci_high": 0.8571
+            },
+            "4": {
+              "value": 0.9143,
+              "ci_low": 0.8571,
+              "ci_high": 0.9714
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.26,
+          "avg_tokens": 5482.2,
+          "policy_violation_rate": 0.2286
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 53,
+        "IGNORED_POLICY": 13,
+        "LOOPING": 1,
+        "GAVE_UP_EARLY": 12,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 3,
+        "HALLUCINATED_FACT": 10,
+        "PARTIAL_SUCCESS": 5,
+        "WRONG_STATE": 3
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.8,
+        "booking-003": 0.8,
+        "booking-004": 0.6,
+        "booking-005": 1.0,
+        "booking-006": 0.4,
+        "booking-007": 0.8,
+        "coding-001": 1.0,
+        "coding-002": 0.8,
+        "coding-003": 0.4,
+        "coding-004": 0.6,
+        "coding-005": 0.2,
+        "coding-006": 0.0,
+        "support-001": 0.4,
+        "support-002": 0.4,
+        "support-003": 0.2,
+        "support-004": 0.4,
+        "support-005": 0.4,
+        "support-006": 0.2,
+        "support-007": 0.2
+      },
+      "rank": 5
+    },
+    {
+      "id": "claude-style/naive",
+      "model": "claude-style",
+      "agent": "naive",
+      "display_name": "Claude-style + Naive loop",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.6,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.6,
+            "ci_low": 0.51,
+            "ci_high": 0.69
+          },
+          "2": {
+            "value": 0.345,
+            "ci_low": 0.25,
+            "ci_high": 0.4551
+          },
+          "3": {
+            "value": 0.19,
+            "ci_low": 0.095,
+            "ci_high": 0.3
+          },
+          "4": {
+            "value": 0.1,
+            "ci_low": 0.02,
+            "ci_high": 0.21
+          },
+          "5": {
+            "value": 0.05,
+            "ci_low": 0.0,
+            "ci_high": 0.15
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.6,
+            "ci_low": 0.52,
+            "ci_high": 0.69
+          },
+          "2": {
+            "value": 0.855,
+            "ci_low": 0.775,
+            "ci_high": 0.915
+          },
+          "3": {
+            "value": 0.955,
+            "ci_low": 0.91,
+            "ci_high": 0.985
+          },
+          "4": {
+            "value": 0.99,
+            "ci_low": 0.97,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.79,
+        "avg_tokens": 4507.1,
+        "policy_violation_rate": 0.13
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6286,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4564,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.4286,
+              "ci_low": 0.1857,
+              "ci_high": 0.7
+            },
+            "3": {
+              "value": 0.3143,
+              "ci_low": 0.1143,
+              "ci_high": 0.5714
+            },
+            "4": {
+              "value": 0.2286,
+              "ci_low": 0.0571,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4286,
+              "ci_high": 0.8286
+            },
+            "2": {
+              "value": 0.8286,
+              "ci_low": 0.6571,
+              "ci_high": 0.9571
+            },
+            "3": {
+              "value": 0.9143,
+              "ci_low": 0.8,
+              "ci_high": 0.9857
+            },
+            "4": {
+              "value": 0.9714,
+              "ci_low": 0.9143,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.57,
+          "avg_tokens": 3981.0,
+          "policy_violation_rate": 0.0857
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.6,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6,
+              "ci_low": 0.4667,
+              "ci_high": 0.7333
+            },
+            "2": {
+              "value": 0.3333,
+              "ci_low": 0.1667,
+              "ci_high": 0.5
+            },
+            "3": {
+              "value": 0.1667,
+              "ci_low": 0.05,
+              "ci_high": 0.3
+            },
+            "4": {
+              "value": 0.0667,
+              "ci_low": 0.0,
+              "ci_high": 0.1333
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6,
+              "ci_low": 0.4667,
+              "ci_high": 0.7333
+            },
+            "2": {
+              "value": 0.8667,
+              "ci_low": 0.7667,
+              "ci_high": 0.9667
+            },
+            "3": {
+              "value": 0.9667,
+              "ci_low": 0.9333,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.2,
+          "avg_tokens": 3395.2,
+          "policy_violation_rate": 0.0667
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.5714,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.5714,
+              "ci_low": 0.5143,
+              "ci_high": 0.6
+            },
+            "2": {
+              "value": 0.2714,
+              "ci_low": 0.2143,
+              "ci_high": 0.3
+            },
+            "3": {
+              "value": 0.0857,
+              "ci_low": 0.0571,
+              "ci_high": 0.1
+            },
+            "4": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.5714,
+              "ci_low": 0.5143,
+              "ci_high": 0.6
+            },
+            "2": {
+              "value": 0.8714,
+              "ci_low": 0.8143,
+              "ci_high": 0.9
+            },
+            "3": {
+              "value": 0.9857,
+              "ci_low": 0.9571,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.66,
+          "avg_tokens": 5986.2,
+          "policy_violation_rate": 0.2286
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 60,
+        "IGNORED_POLICY": 13,
+        "LOOPING": 6,
+        "GAVE_UP_EARLY": 10,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 7,
+        "PARTIAL_SUCCESS": 2,
+        "WRONG_STATE": 1
+      },
+      "per_task_success": {
+        "booking-001": 0.8,
+        "booking-002": 0.8,
+        "booking-003": 0.8,
+        "booking-004": 1.0,
+        "booking-005": 0.4,
+        "booking-006": 0.2,
+        "booking-007": 0.4,
+        "coding-001": 0.6,
+        "coding-002": 0.4,
+        "coding-003": 0.8,
+        "coding-004": 0.6,
+        "coding-005": 0.8,
+        "coding-006": 0.4,
+        "support-001": 0.6,
+        "support-002": 0.6,
+        "support-003": 0.6,
+        "support-004": 0.4,
+        "support-005": 0.6,
+        "support-006": 0.6,
+        "support-007": 0.6
+      },
+      "rank": 6
+    },
+    {
+      "id": "llama-70b-style/react",
+      "model": "llama-70b-style",
+      "agent": "react",
+      "display_name": "Llama-3-70B-style + ReAct",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.54,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.54,
+            "ci_low": 0.43,
+            "ci_high": 0.65
+          },
+          "2": {
+            "value": 0.3,
+            "ci_low": 0.19,
+            "ci_high": 0.425
+          },
+          "3": {
+            "value": 0.175,
+            "ci_low": 0.08,
+            "ci_high": 0.3
+          },
+          "4": {
+            "value": 0.1,
+            "ci_low": 0.0298,
+            "ci_high": 0.21
+          },
+          "5": {
+            "value": 0.05,
+            "ci_low": 0.0,
+            "ci_high": 0.15
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.54,
+            "ci_low": 0.44,
+            "ci_high": 0.64
+          },
+          "2": {
+            "value": 0.78,
+            "ci_low": 0.68,
+            "ci_high": 0.87
+          },
+          "3": {
+            "value": 0.895,
+            "ci_low": 0.83,
+            "ci_high": 0.96
+          },
+          "4": {
+            "value": 0.96,
+            "ci_low": 0.92,
+            "ci_high": 0.99
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.08,
+        "avg_tokens": 4179.3,
+        "policy_violation_rate": 0.13
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6286,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4564,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.4143,
+              "ci_low": 0.2,
+              "ci_high": 0.6429
+            },
+            "3": {
+              "value": 0.2857,
+              "ci_low": 0.0714,
+              "ci_high": 0.5714
+            },
+            "4": {
+              "value": 0.2,
+              "ci_low": 0.0286,
+              "ci_high": 0.4857
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6286,
+              "ci_low": 0.4286,
+              "ci_high": 0.8
+            },
+            "2": {
+              "value": 0.8429,
+              "ci_low": 0.6714,
+              "ci_high": 0.9714
+            },
+            "3": {
+              "value": 0.9286,
+              "ci_low": 0.8143,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 0.9714,
+              "ci_low": 0.9143,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.09,
+          "avg_tokens": 3521.1,
+          "policy_violation_rate": 0.0571
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.5333,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.5333,
+              "ci_low": 0.3667,
+              "ci_high": 0.7
+            },
+            "2": {
+              "value": 0.2833,
+              "ci_low": 0.1,
+              "ci_high": 0.4667
+            },
+            "3": {
+              "value": 0.15,
+              "ci_low": 0.0167,
+              "ci_high": 0.2833
+            },
+            "4": {
+              "value": 0.0667,
+              "ci_low": 0.0,
+              "ci_high": 0.1333
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.5333,
+              "ci_low": 0.3667,
+              "ci_high": 0.7
+            },
+            "2": {
+              "value": 0.7833,
+              "ci_low": 0.6,
+              "ci_high": 0.9333
+            },
+            "3": {
+              "value": 0.9,
+              "ci_low": 0.7667,
+              "ci_high": 0.9833
+            },
+            "4": {
+              "value": 0.9667,
+              "ci_low": 0.9,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.57,
+          "avg_tokens": 4935.2,
+          "policy_violation_rate": 0.1333
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.4571,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.4571,
+              "ci_low": 0.3143,
+              "ci_high": 0.6286
+            },
+            "2": {
+              "value": 0.2,
+              "ci_low": 0.0571,
+              "ci_high": 0.3571
+            },
+            "3": {
+              "value": 0.0857,
+              "ci_low": 0.0143,
+              "ci_high": 0.2
+            },
+            "4": {
+              "value": 0.0286,
+              "ci_low": 0.0,
+              "ci_high": 0.0857
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.4571,
+              "ci_low": 0.3143,
+              "ci_high": 0.6
+            },
+            "2": {
+              "value": 0.7143,
+              "ci_low": 0.5286,
+              "ci_high": 0.8714
+            },
+            "3": {
+              "value": 0.8571,
+              "ci_low": 0.7143,
+              "ci_high": 0.9714
+            },
+            "4": {
+              "value": 0.9429,
+              "ci_low": 0.8857,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.8,
+          "avg_tokens": 4189.7,
+          "policy_violation_rate": 0.2
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 54,
+        "IGNORED_POLICY": 13,
+        "LOOPING": 1,
+        "GAVE_UP_EARLY": 11,
+        "WRONG_TOOL": 1,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 12,
+        "PARTIAL_SUCCESS": 4,
+        "WRONG_STATE": 3
+      },
+      "per_task_success": {
+        "booking-001": 0.8,
+        "booking-002": 0.4,
+        "booking-003": 0.6,
+        "booking-004": 0.8,
+        "booking-005": 1.0,
+        "booking-006": 0.6,
+        "booking-007": 0.2,
+        "coding-001": 0.4,
+        "coding-002": 0.8,
+        "coding-003": 0.4,
+        "coding-004": 0.8,
+        "coding-005": 0.6,
+        "coding-006": 0.2,
+        "support-001": 0.6,
+        "support-002": 0.8,
+        "support-003": 0.2,
+        "support-004": 0.4,
+        "support-005": 0.6,
+        "support-006": 0.2,
+        "support-007": 0.4
+      },
+      "rank": 7
+    },
+    {
+      "id": "gpt-4o-style/naive",
+      "model": "gpt-4o-style",
+      "agent": "naive",
+      "display_name": "GPT-4o-style + Naive loop",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.56,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.56,
+            "ci_low": 0.48,
+            "ci_high": 0.65
+          },
+          "2": {
+            "value": 0.3,
+            "ci_low": 0.2,
+            "ci_high": 0.42
+          },
+          "3": {
+            "value": 0.155,
+            "ci_low": 0.07,
+            "ci_high": 0.27
+          },
+          "4": {
+            "value": 0.08,
+            "ci_low": 0.01,
+            "ci_high": 0.19
+          },
+          "5": {
+            "value": 0.05,
+            "ci_low": 0.0,
+            "ci_high": 0.15
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.56,
+            "ci_low": 0.47,
+            "ci_high": 0.64
+          },
+          "2": {
+            "value": 0.82,
+            "ci_low": 0.7399,
+            "ci_high": 0.89
+          },
+          "3": {
+            "value": 0.935,
+            "ci_low": 0.875,
+            "ci_high": 0.98
+          },
+          "4": {
+            "value": 0.98,
+            "ci_low": 0.95,
+            "ci_high": 1.0
+          },
+          "5": {
+            "value": 1.0,
+            "ci_low": 1.0,
+            "ci_high": 1.0
+          }
+        },
+        "avg_steps": 4.36,
+        "avg_tokens": 3804.3,
+        "policy_violation_rate": 0.13
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.6,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6,
+              "ci_low": 0.4857,
+              "ci_high": 0.7429
+            },
+            "2": {
+              "value": 0.3429,
+              "ci_low": 0.1857,
+              "ci_high": 0.5714
+            },
+            "3": {
+              "value": 0.2,
+              "ci_low": 0.0429,
+              "ci_high": 0.4714
+            },
+            "4": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6,
+              "ci_low": 0.4857,
+              "ci_high": 0.7429
+            },
+            "2": {
+              "value": 0.8571,
+              "ci_low": 0.7857,
+              "ci_high": 0.9286
+            },
+            "3": {
+              "value": 0.9714,
+              "ci_low": 0.9425,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.14,
+          "avg_tokens": 4321.2,
+          "policy_violation_rate": 0.0857
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.6333,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.6333,
+              "ci_low": 0.4333,
+              "ci_high": 0.7667
+            },
+            "2": {
+              "value": 0.4,
+              "ci_low": 0.2,
+              "ci_high": 0.6
+            },
+            "3": {
+              "value": 0.2333,
+              "ci_low": 0.1,
+              "ci_high": 0.35
+            },
+            "4": {
+              "value": 0.1,
+              "ci_low": 0.0333,
+              "ci_high": 0.1667
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.6333,
+              "ci_low": 0.4333,
+              "ci_high": 0.7667
+            },
+            "2": {
+              "value": 0.8667,
+              "ci_low": 0.6833,
+              "ci_high": 0.9833
+            },
+            "3": {
+              "value": 0.9333,
+              "ci_low": 0.8,
+              "ci_high": 1.0
+            },
+            "4": {
+              "value": 0.9667,
+              "ci_low": 0.9,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 5.3,
+          "avg_tokens": 3570.3,
+          "policy_violation_rate": 0.1
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.4571,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.4571,
+              "ci_low": 0.3429,
+              "ci_high": 0.5714
+            },
+            "2": {
+              "value": 0.1714,
+              "ci_low": 0.0857,
+              "ci_high": 0.2571
+            },
+            "3": {
+              "value": 0.0429,
+              "ci_low": 0.0,
+              "ci_high": 0.0857
+            },
+            "4": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.4571,
+              "ci_low": 0.3429,
+              "ci_high": 0.5429
+            },
+            "2": {
+              "value": 0.7429,
+              "ci_low": 0.6,
+              "ci_high": 0.8429
+            },
+            "3": {
+              "value": 0.9,
+              "ci_low": 0.8,
+              "ci_high": 0.9714
+            },
+            "4": {
+              "value": 0.9714,
+              "ci_low": 0.9143,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 3.77,
+          "avg_tokens": 3488.1,
+          "policy_violation_rate": 0.2
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 56,
+        "IGNORED_POLICY": 13,
+        "LOOPING": 2,
+        "GAVE_UP_EARLY": 10,
+        "WRONG_TOOL": 3,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 10,
+        "PARTIAL_SUCCESS": 4,
+        "WRONG_STATE": 1
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.6,
+        "booking-003": 0.6,
+        "booking-004": 0.6,
+        "booking-005": 0.4,
+        "booking-006": 0.6,
+        "booking-007": 0.4,
+        "coding-001": 0.8,
+        "coding-002": 0.8,
+        "coding-003": 0.8,
+        "coding-004": 0.6,
+        "coding-005": 0.6,
+        "coding-006": 0.2,
+        "support-001": 0.4,
+        "support-002": 0.4,
+        "support-003": 0.2,
+        "support-004": 0.6,
+        "support-005": 0.6,
+        "support-006": 0.4,
+        "support-007": 0.6
+      },
+      "rank": 8
+    },
+    {
+      "id": "llama-70b-style/naive",
+      "model": "llama-70b-style",
+      "agent": "naive",
+      "display_name": "Llama-3-70B-style + Naive loop",
+      "overall": {
+        "n_tasks": 20,
+        "trials_per_task": 5,
+        "n_runs": 100,
+        "success_rate": 0.29,
+        "pass_hat_k": {
+          "1": {
+            "value": 0.29,
+            "ci_low": 0.18,
+            "ci_high": 0.41
+          },
+          "2": {
+            "value": 0.125,
+            "ci_low": 0.035,
+            "ci_high": 0.245
+          },
+          "3": {
+            "value": 0.075,
+            "ci_low": 0.0,
+            "ci_high": 0.195
+          },
+          "4": {
+            "value": 0.06,
+            "ci_low": 0.0,
+            "ci_high": 0.17
+          },
+          "5": {
+            "value": 0.05,
+            "ci_low": 0.0,
+            "ci_high": 0.15
+          }
+        },
+        "pass_at_k": {
+          "1": {
+            "value": 0.29,
+            "ci_low": 0.18,
+            "ci_high": 0.41
+          },
+          "2": {
+            "value": 0.455,
+            "ci_low": 0.305,
+            "ci_high": 0.605
+          },
+          "3": {
+            "value": 0.57,
+            "ci_low": 0.395,
+            "ci_high": 0.7451
+          },
+          "4": {
+            "value": 0.65,
+            "ci_low": 0.45,
+            "ci_high": 0.83
+          },
+          "5": {
+            "value": 0.7,
+            "ci_low": 0.5,
+            "ci_high": 0.9
+          }
+        },
+        "avg_steps": 5.49,
+        "avg_tokens": 5670.9,
+        "policy_violation_rate": 0.19
+      },
+      "by_domain": {
+        "booking": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.4,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.4,
+              "ci_low": 0.2286,
+              "ci_high": 0.6007
+            },
+            "2": {
+              "value": 0.2,
+              "ci_low": 0.0429,
+              "ci_high": 0.4714
+            },
+            "3": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            },
+            "4": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            },
+            "5": {
+              "value": 0.1429,
+              "ci_low": 0.0,
+              "ci_high": 0.4286
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.4,
+              "ci_low": 0.2,
+              "ci_high": 0.6
+            },
+            "2": {
+              "value": 0.6,
+              "ci_low": 0.3714,
+              "ci_high": 0.7857
+            },
+            "3": {
+              "value": 0.7429,
+              "ci_low": 0.4714,
+              "ci_high": 0.9286
+            },
+            "4": {
+              "value": 0.8286,
+              "ci_low": 0.5429,
+              "ci_high": 1.0
+            },
+            "5": {
+              "value": 0.8571,
+              "ci_low": 0.5714,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.37,
+          "avg_tokens": 5345.3,
+          "policy_violation_rate": 0.0571
+        },
+        "coding": {
+          "n_tasks": 6,
+          "trials_per_task": 5,
+          "n_runs": 30,
+          "success_rate": 0.3667,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.3667,
+              "ci_low": 0.2333,
+              "ci_high": 0.5667
+            },
+            "2": {
+              "value": 0.1333,
+              "ci_low": 0.0167,
+              "ci_high": 0.3333
+            },
+            "3": {
+              "value": 0.0667,
+              "ci_low": 0.0,
+              "ci_high": 0.2
+            },
+            "4": {
+              "value": 0.0333,
+              "ci_low": 0.0,
+              "ci_high": 0.1
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.3667,
+              "ci_low": 0.2333,
+              "ci_high": 0.5667
+            },
+            "2": {
+              "value": 0.6,
+              "ci_low": 0.45,
+              "ci_high": 0.8
+            },
+            "3": {
+              "value": 0.7667,
+              "ci_low": 0.65,
+              "ci_high": 0.9167
+            },
+            "4": {
+              "value": 0.9,
+              "ci_low": 0.8333,
+              "ci_high": 0.9667
+            },
+            "5": {
+              "value": 1.0,
+              "ci_low": 1.0,
+              "ci_high": 1.0
+            }
+          },
+          "avg_steps": 4.6,
+          "avg_tokens": 3054.9,
+          "policy_violation_rate": 0.2
+        },
+        "support": {
+          "n_tasks": 7,
+          "trials_per_task": 5,
+          "n_runs": 35,
+          "success_rate": 0.1143,
+          "pass_hat_k": {
+            "1": {
+              "value": 0.1143,
+              "ci_low": 0.0,
+              "ci_high": 0.2857
+            },
+            "2": {
+              "value": 0.0429,
+              "ci_low": 0.0,
+              "ci_high": 0.1286
+            },
+            "3": {
+              "value": 0.0143,
+              "ci_low": 0.0,
+              "ci_high": 0.0429
+            },
+            "4": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            },
+            "5": {
+              "value": 0.0,
+              "ci_low": 0.0,
+              "ci_high": 0.0
+            }
+          },
+          "pass_at_k": {
+            "1": {
+              "value": 0.1143,
+              "ci_low": 0.0,
+              "ci_high": 0.2857
+            },
+            "2": {
+              "value": 0.1857,
+              "ci_low": 0.0,
+              "ci_high": 0.4429
+            },
+            "3": {
+              "value": 0.2286,
+              "ci_low": 0.0,
+              "ci_high": 0.5143
+            },
+            "4": {
+              "value": 0.2571,
+              "ci_low": 0.0,
+              "ci_high": 0.5429
+            },
+            "5": {
+              "value": 0.2857,
+              "ci_low": 0.0,
+              "ci_high": 0.7143
+            }
+          },
+          "avg_steps": 7.37,
+          "avg_tokens": 8238.9,
+          "policy_violation_rate": 0.3143
+        }
+      },
+      "failure_breakdown": {
+        "SUCCESS": 29,
+        "IGNORED_POLICY": 19,
+        "LOOPING": 15,
+        "GAVE_UP_EARLY": 20,
+        "WRONG_TOOL": 0,
+        "HALLUCINATED_ARG": 1,
+        "HALLUCINATED_FACT": 10,
+        "PARTIAL_SUCCESS": 5,
+        "WRONG_STATE": 1
+      },
+      "per_task_success": {
+        "booking-001": 1.0,
+        "booking-002": 0.4,
+        "booking-003": 0.4,
+        "booking-004": 0.4,
+        "booking-005": 0.4,
+        "booking-006": 0.0,
+        "booking-007": 0.2,
+        "coding-001": 0.4,
+        "coding-002": 0.2,
+        "coding-003": 0.8,
+        "coding-004": 0.2,
+        "coding-005": 0.4,
+        "coding-006": 0.2,
+        "support-001": 0.0,
+        "support-002": 0.0,
+        "support-003": 0.0,
+        "support-004": 0.6,
+        "support-005": 0.2,
+        "support-006": 0.0,
+        "support-007": 0.0
+      },
+      "rank": 9
+    }
+  ]
+}

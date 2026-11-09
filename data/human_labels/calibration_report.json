@@ -1,0 +1,713 @@
+[
+  {
+    "classifier": "Rule-based",
+    "n": 50,
+    "kappa": 0.7733,
+    "kappa_ci": [
+      0.6384,
+      0.8972
+    ],
+    "interpretation": "substantial",
+    "percent_agreement": 0.82,
+    "binary_success_kappa": 1.0,
+    "labels": [
+      "SUCCESS",
+      "IGNORED_POLICY",
+      "LOOPING",
+      "GAVE_UP_EARLY",
+      "WRONG_TOOL",
+      "HALLUCINATED_ARG",
+      "HALLUCINATED_FACT",
+      "PARTIAL_SUCCESS",
+      "WRONG_STATE"
+    ],
+    "confusion_matrix": [
+      [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "per_class": {
+      "SUCCESS": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 20
+      },
+      "IGNORED_POLICY": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.857,
+        "support": 3
+      },
+      "LOOPING": {
+        "precision": 0.667,
+        "recall": 1.0,
+        "f1": 0.8,
+        "support": 4
+      },
+      "GAVE_UP_EARLY": {
+        "precision": 1.0,
+        "recall": 0.75,
+        "f1": 0.857,
+        "support": 4
+      },
+      "WRONG_TOOL": {
+        "precision": 1.0,
+        "recall": 0.333,
+        "f1": 0.5,
+        "support": 3
+      },
+      "HALLUCINATED_ARG": {
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.333,
+        "support": 5
+      },
+      "HALLUCINATED_FACT": {
+        "precision": 0.444,
+        "recall": 1.0,
+        "f1": 0.615,
+        "support": 4
+      },
+      "PARTIAL_SUCCESS": {
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.889,
+        "support": 4
+      },
+      "WRONG_STATE": {
+        "precision": 1.0,
+        "recall": 0.333,
+        "f1": 0.5,
+        "support": 3
+      }
+    },
+    "disagreements": [
+      {
+        "run_id": "support-002__planact__llama-70b-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "coding-002__react__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__planact__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "PARTIAL_SUCCESS"
+      },
+      {
+        "run_id": "coding-004__naive__llama-70b-style__t2",
+        "human": "WRONG_TOOL",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t1",
+        "human": "GAVE_UP_EARLY",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "coding-003__planact__llama-70b-style__t0",
+        "human": "WRONG_TOOL",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "booking-004__react__llama-70b-style__t0",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t0",
+        "human": "WRONG_STATE",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "coding-002__naive__llama-70b-style__t1",
+        "human": "WRONG_STATE",
+        "auto": "IGNORED_POLICY"
+      }
+    ]
+  },
+  {
+    "classifier": "LLM judge (simulated)",
+    "n": 50,
+    "kappa": 0.6755,
+    "kappa_ci": [
+      0.5324,
+      0.8223
+    ],
+    "interpretation": "substantial",
+    "percent_agreement": 0.74,
+    "binary_success_kappa": 0.958,
+    "labels": [
+      "SUCCESS",
+      "IGNORED_POLICY",
+      "LOOPING",
+      "GAVE_UP_EARLY",
+      "WRONG_TOOL",
+      "HALLUCINATED_ARG",
+      "HALLUCINATED_FACT",
+      "PARTIAL_SUCCESS",
+      "WRONG_STATE"
+    ],
+    "confusion_matrix": [
+      [
+        19,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "per_class": {
+      "SUCCESS": {
+        "precision": 1.0,
+        "recall": 0.95,
+        "f1": 0.974,
+        "support": 20
+      },
+      "IGNORED_POLICY": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.857,
+        "support": 3
+      },
+      "LOOPING": {
+        "precision": 0.5,
+        "recall": 0.75,
+        "f1": 0.6,
+        "support": 4
+      },
+      "GAVE_UP_EARLY": {
+        "precision": 0.667,
+        "recall": 0.5,
+        "f1": 0.571,
+        "support": 4
+      },
+      "WRONG_TOOL": {
+        "precision": 1.0,
+        "recall": 0.333,
+        "f1": 0.5,
+        "support": 3
+      },
+      "HALLUCINATED_ARG": {
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.333,
+        "support": 5
+      },
+      "HALLUCINATED_FACT": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.667,
+        "support": 4
+      },
+      "PARTIAL_SUCCESS": {
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.667,
+        "support": 4
+      },
+      "WRONG_STATE": {
+        "precision": 0.333,
+        "recall": 0.333,
+        "f1": 0.333,
+        "support": 3
+      }
+    },
+    "disagreements": [
+      {
+        "run_id": "support-002__planact__llama-70b-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "WRONG_STATE"
+      },
+      {
+        "run_id": "coding-002__react__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "coding-002__planact__claude-style__t0",
+        "human": "SUCCESS",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__planact__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "PARTIAL_SUCCESS"
+      },
+      {
+        "run_id": "booking-007__react__llama-70b-style__t2",
+        "human": "PARTIAL_SUCCESS",
+        "auto": "WRONG_STATE"
+      },
+      {
+        "run_id": "coding-004__naive__llama-70b-style__t2",
+        "human": "WRONG_TOOL",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t1",
+        "human": "GAVE_UP_EARLY",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "booking-006__naive__claude-style__t1",
+        "human": "GAVE_UP_EARLY",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "support-001__naive__llama-70b-style__t1",
+        "human": "LOOPING",
+        "auto": "GAVE_UP_EARLY"
+      },
+      {
+        "run_id": "coding-003__planact__llama-70b-style__t0",
+        "human": "WRONG_TOOL",
+        "auto": "PARTIAL_SUCCESS"
+      },
+      {
+        "run_id": "booking-004__react__llama-70b-style__t0",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t0",
+        "human": "WRONG_STATE",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "coding-002__naive__llama-70b-style__t1",
+        "human": "WRONG_STATE",
+        "auto": "IGNORED_POLICY"
+      }
+    ]
+  },
+  {
+    "classifier": "Hybrid (rules + judge)",
+    "n": 50,
+    "kappa": 0.7232,
+    "kappa_ci": [
+      0.5895,
+      0.8571
+    ],
+    "interpretation": "substantial",
+    "percent_agreement": 0.78,
+    "binary_success_kappa": 1.0,
+    "labels": [
+      "SUCCESS",
+      "IGNORED_POLICY",
+      "LOOPING",
+      "GAVE_UP_EARLY",
+      "WRONG_TOOL",
+      "HALLUCINATED_ARG",
+      "HALLUCINATED_FACT",
+      "PARTIAL_SUCCESS",
+      "WRONG_STATE"
+    ],
+    "confusion_matrix": [
+      [
+        20,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "per_class": {
+      "SUCCESS": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 20
+      },
+      "IGNORED_POLICY": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.857,
+        "support": 3
+      },
+      "LOOPING": {
+        "precision": 0.571,
+        "recall": 1.0,
+        "f1": 0.727,
+        "support": 4
+      },
+      "GAVE_UP_EARLY": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.667,
+        "support": 4
+      },
+      "WRONG_TOOL": {
+        "precision": 1.0,
+        "recall": 0.333,
+        "f1": 0.5,
+        "support": 3
+      },
+      "HALLUCINATED_ARG": {
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.333,
+        "support": 5
+      },
+      "HALLUCINATED_FACT": {
+        "precision": 0.571,
+        "recall": 1.0,
+        "f1": 0.727,
+        "support": 4
+      },
+      "PARTIAL_SUCCESS": {
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.667,
+        "support": 4
+      },
+      "WRONG_STATE": {
+        "precision": 0.333,
+        "recall": 0.333,
+        "f1": 0.333,
+        "support": 3
+      }
+    },
+    "disagreements": [
+      {
+        "run_id": "support-002__planact__llama-70b-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "WRONG_STATE"
+      },
+      {
+        "run_id": "coding-002__react__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__planact__gpt-4o-style__t1",
+        "human": "HALLUCINATED_ARG",
+        "auto": "PARTIAL_SUCCESS"
+      },
+      {
+        "run_id": "booking-007__react__llama-70b-style__t2",
+        "human": "PARTIAL_SUCCESS",
+        "auto": "WRONG_STATE"
+      },
+      {
+        "run_id": "coding-004__naive__llama-70b-style__t2",
+        "human": "WRONG_TOOL",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t1",
+        "human": "GAVE_UP_EARLY",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "booking-006__naive__claude-style__t1",
+        "human": "GAVE_UP_EARLY",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "coding-003__planact__llama-70b-style__t0",
+        "human": "WRONG_TOOL",
+        "auto": "PARTIAL_SUCCESS"
+      },
+      {
+        "run_id": "booking-004__react__llama-70b-style__t0",
+        "human": "HALLUCINATED_ARG",
+        "auto": "HALLUCINATED_FACT"
+      },
+      {
+        "run_id": "support-006__naive__llama-70b-style__t0",
+        "human": "WRONG_STATE",
+        "auto": "LOOPING"
+      },
+      {
+        "run_id": "coding-002__naive__llama-70b-style__t1",
+        "human": "WRONG_STATE",
+        "auto": "IGNORED_POLICY"
+      }
+    ]
+  }
+]

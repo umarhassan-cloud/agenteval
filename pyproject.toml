@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agenteval"
+version = "0.1.0"
+description = "Reliability and evaluation platform for tool-using AI agents: pass^k, failure taxonomy, calibrated LLM judges."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Umar Hassan", email = "1umar.hassan1@gmail.com" }]
+requires-python = ">=3.10"
+keywords = ["llm", "agents", "evaluation", "benchmark", "reliability", "tau-bench"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+openai = ["openai>=1.30"]
+anthropic = ["anthropic>=0.30"]
+dev = ["pytest>=7.0", "ruff>=0.4"]
+
+[project.urls]
+Homepage = "https://github.com/umarhassan/agenteval"
+
+[tool.setuptools.packages.find]
+include = ["agenteval*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

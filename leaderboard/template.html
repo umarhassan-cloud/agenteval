@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AgentEval Leaderboard: Reliability of Tool-Using Agents</title>
+<style>
+  :root {
+    --bg: #0f1218; --panel: #171b24; --border: #262c3a; --text: #e6e9ef; --muted: #8b93a7;
+    --accent: #6ea8fe; --good: #4cc38a; --bad: #f06c6c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--text); }
+  header { padding: 28px 32px 8px; }
+  h1 { margin: 0 0 4px; font-size: 24px; }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  .sub { color: var(--muted); }
+  .banner { margin: 12px 32px 0; padding: 10px 14px; border: 1px solid #5a4a1d; background: #2a2414;
+            border-radius: 8px; color: #e8d39a; font-size: 13px; }
+  main { padding: 16px 32px 48px; display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .full { grid-column: 1 / -1; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 7px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+  th { color: var(--muted); font-weight: 600; cursor: pointer; user-select: none; }
+  th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+  tr:hover td { background: #1c2230; }
+  .ci { color: var(--muted); font-size: 12px; }
+  .bar { position: relative; height: 6px; background: #232a38; border-radius: 3px; margin-top: 3px; }
+  .bar > span { position: absolute; top: 0; height: 6px; border-radius: 3px; background: var(--accent); opacity: .35; }
+  .bar > i { position: absolute; top: -2px; width: 2px; height: 10px; background: var(--accent); }
+  .controls { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; color: var(--muted); }
+  select { background: #10141c; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .legend b { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .stack { display: flex; height: 18px; border-radius: 4px; overflow: hidden; background: #232a38; }
+  .stack > div { height: 100%; }
+  .row { display: grid; grid-template-columns: 210px 1fr 48px; gap: 10px; align-items: center; margin: 6px 0; font-size: 13px; }
+  .heat td { text-align: center; font-weight: 600; }
+  svg text { fill: var(--muted); font-size: 11px; }
+  footer { color: var(--muted); padding: 0 32px 32px; font-size: 12px; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>AgentEval Leaderboard</h1>
+  <div class="sub" id="subtitle"></div>
+</header>
+<div class="banner">
+  Results are produced by AgentEval's <b>offline simulated models</b> (seeded fault-injection profiles named
+  "*-style"), not by the real APIs. They demonstrate the methodology end to end. Re-run
+  <code>scripts/generate_leaderboard.py</code> with <code>openai:</code>/<code>anthropic:</code> models for real numbers.
+</div>
+<main>
+  <section class="panel full">
+    <div class="controls">
+      <h2 style="margin:0;flex:1">Reliability leaderboard</h2>
+      <label>Scope <select id="scope"></select></label>
+    </div>
+    <table id="board"></table>
+    <div class="sub" style="margin-top:8px;font-size:12px">
+      pass^k = probability that all k independent trials of a task succeed (τ-bench), averaged over tasks.
+      Brackets are 95% bootstrap CIs (resampling tasks). Click a header to sort.
+    </div>
+  </section>
+  <section class="panel">
+    <h2>Reliability decay: pass^k vs k</h2>
+    <svg id="curve" viewBox="0 0 520 300" width="100%"></svg>
+    <div class="legend" id="curveLegend"></div>
+  </section>
+  <section class="panel">
+    <h2>Agent design comparison (pass^3)</h2>
+    <svg id="design" viewBox="0 0 520 300" width="100%"></svg>
+    <div class="legend" id="designLegend"></div>
+  </section>
+  <section class="panel full">
+    <h2>Failure taxonomy breakdown (share of failed runs)</h2>
+    <div id="failures"></div>
+    <div class="legend" id="failLegend"></div>
+  </section>
+  <section class="panel full">
+    <h2>pass^3 by domain</h2>
+    <table class="heat" id="heat"></table>
+  </section>
+</main>
+<footer id="footer"></footer>
+<script>
+const DATA = /*__LEADERBOARD_DATA__*/null;
+const PALETTE = ["#6ea8fe","#4cc38a","#f0b45c","#c38cf0","#f06c6c","#5cd1d6","#e889c3","#a3b85c","#8f9bb3"];
+const FAIL_COLORS = {IGNORED_POLICY:"#f06c6c",LOOPING:"#c38cf0",GAVE_UP_EARLY:"#f0b45c",WRONG_TOOL:"#5cd1d6",
+  HALLUCINATED_ARG:"#e889c3",HALLUCINATED_FACT:"#6ea8fe",PARTIAL_SUCCESS:"#a3b85c",WRONG_STATE:"#8f9bb3"};
+const AGENT_COLORS = {react:"#6ea8fe", planact:"#4cc38a", naive:"#f0b45c"};
+const fmt = v => v.toFixed(2);
+const el = (tag, attrs={}, html="") => { const e = document.createElementNS(
+  tag === "svg" || ["line","rect","text","polyline","circle","g","path"].includes(tag) ? "http://www.w3.org/2000/svg" : "http://www.w3.org/1999/xhtml", tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v); if (html) e.innerHTML = html; return e; };
+
+function init() {
+  if (!DATA) { document.body.innerHTML = "<p style='padding:32px'>No data embedded. Run scripts/generate_leaderboard.py.</p>"; return; }
+  const m = DATA.meta;
+  document.getElementById("subtitle").textContent =
+    `${m.n_tasks} tasks across ${m.domains.join(", ")} · ${m.trials} trials per task · ${DATA.entries.length} configurations · ${m.classifier}`;
+  document.getElementById("footer").textContent = `Generated by agenteval v${m.agenteval_version}. Max ${m.max_steps} steps per episode.`;
+  const scope = document.getElementById("scope");
+  ["overall", ...m.domains].forEach(s => scope.append(new Option(s, s)));
+  scope.onchange = () => renderBoard(scope.value);
+  renderBoard("overall"); renderCurve(); renderDesign(); renderFailures(); renderHeat();
+}
+
+let sortKey = "p3", sortDir = -1;
+function stats(e, scope) { return scope === "overall" ? e.overall : e.by_domain[scope]; }
+function renderBoard(scope) {
+  const t = document.getElementById("board");
+  const cols = [["rank","#"],["name","Configuration"],["p1","pass^1"],["p3","pass^3"],["p5","pass^5"],["a3","pass@3"],
+                ["pol","Policy viol."],["steps","Avg steps"],["tok","Avg tokens"]];
+  const rows = DATA.entries.map(e => { const s = stats(e, scope); const h = s.pass_hat_k;
+    return {e, rank:e.rank, name:e.display_name, p1:h["1"], p3:h["3"], p5:h["5"] || h["3"], a3:s.pass_at_k["3"].value,
+            pol:s.policy_violation_rate, steps:s.avg_steps, tok:s.avg_tokens}; });
+  const val = (r,k) => (r[k] && typeof r[k] === "object") ? r[k].value : r[k];
+  rows.sort((a,b) => { const x = val(a,sortKey), y = val(b,sortKey);
+    return typeof x === "string" ? sortDir * x.localeCompare(y) : sortDir * (x - y); });
+  const ciCell = c => `${fmt(c.value)} <span class="ci">[${fmt(c.ci_low)}, ${fmt(c.ci_high)}]</span>
+    <div class="bar"><span style="left:${c.ci_low*100}%;width:${(c.ci_high-c.ci_low)*100}%"></span><i style="left:${c.value*100}%"></i></div>`;
+  t.innerHTML = "<tr>" + cols.map(([k,l]) => `<th data-k="${k}">${l}${k===sortKey ? (sortDir<0?" ▾":" ▴") : ""}</th>`).join("") + "</tr>" +
+    rows.map(r => `<tr><td>${r.rank}</td><td>${r.name}</td><td>${ciCell(r.p1)}</td><td>${ciCell(r.p3)}</td><td>${ciCell(r.p5)}</td>
+      <td>${fmt(r.a3)}</td><td>${(r.pol*100).toFixed(1)}%</td><td>${r.steps.toFixed(1)}</td><td>${Math.round(r.tok).toLocaleString()}</td></tr>`).join("");
+  t.querySelectorAll("th").forEach(th => th.onclick = () => {
+    const k = th.dataset.k; sortDir = (k === sortKey) ? -sortDir : (k === "name" || k === "rank" ? 1 : -1); sortKey = k; renderBoard(scope); });
+}
+
+function axes(svg, W, H, pad, yMax, xLabels) {
+  for (let i = 0; i <= 5; i++) { const y = H - pad.b - (H - pad.t - pad.b) * i / 5;
+    svg.append(el("line", {x1:pad.l, x2:W-pad.r, y1:y, y2:y, stroke:"#262c3a"}));
+    svg.append(el("text", {x:pad.l-6, y:y+4, "text-anchor":"end"}, (yMax*i/5).toFixed(1))); }
+  xLabels.forEach((lab, i) => { const x = pad.l + (W-pad.l-pad.r) * (i + .5) / xLabels.length;
+    svg.append(el("text", {x, y:H-pad.b+16, "text-anchor":"middle"}, lab)); });
+}
+
+function renderCurve() {
+  const svg = document.getElementById("curve"), W=520, H=300, pad={l:40,r:12,t:12,b:28};
+  const ks = DATA.meta.ks; axes(svg, W, H, pad, 1, ks.map(k => "k="+k));
+  const legend = document.getElementById("curveLegend");
+  DATA.entries.forEach((e, i) => { const color = PALETTE[i % PALETTE.length];
+    const pts = ks.map((k, j) => { const x = pad.l + (W-pad.l-pad.r) * (j + .5) / ks.length;
+      const y = H - pad.b - (H-pad.t-pad.b) * e.overall.pass_hat_k[String(k)].value; return [x,y]; });
+    svg.append(el("polyline", {points: pts.map(p => p.join(",")).join(" "), fill:"none", stroke:color, "stroke-width":2}));
+    pts.forEach(([x,y]) => svg.append(el("circle", {cx:x, cy:y, r:3, fill:color})));
+    legend.insertAdjacentHTML("beforeend", `<span><b style="background:${color}"></b>${e.display_name}</span>`); });
+}
+
+function renderDesign() {
+  const svg = document.getElementById("design"), W=520, H=300, pad={l:40,r:12,t:12,b:28};
+  const models = [...new Set(DATA.entries.map(e => e.model))], agents = ["react","planact","naive"];
+  const label = m => DATA.entries.find(e => e.model === m).display_name.split(" + ")[0];
+  axes(svg, W, H, pad, 1, models.map(label));
+  const groupW = (W-pad.l-pad.r) / models.length, barW = groupW / (agents.length + 1.2);
+  models.forEach((m, i) => agents.forEach((a, j) => {
+    const e = DATA.entries.find(x => x.model === m && x.agent === a); if (!e) return;
+    const c = e.overall.pass_hat_k["3"], x = pad.l + groupW*i + barW*(j+.6), h = (H-pad.t-pad.b)*c.value;
+    svg.append(el("rect", {x, y:H-pad.b-h, width:barW-4, height:h, fill:AGENT_COLORS[a], rx:2}));
+    const yl = H-pad.b-(H-pad.t-pad.b)*c.ci_low, yh = H-pad.b-(H-pad.t-pad.b)*c.ci_high, cx = x+(barW-4)/2;
+    svg.append(el("line", {x1:cx, x2:cx, y1:yl, y2:yh, stroke:"#e6e9ef", "stroke-width":1}));
+    svg.append(el("text", {x:cx, y:H-pad.b-h-4, "text-anchor":"middle"}, fmt(c.value)));
+  }));
+  document.getElementById("designLegend").innerHTML = agents.map(a =>
+    `<span><b style="background:${AGENT_COLORS[a]}"></b>${{react:"ReAct",planact:"Plan-then-Act",naive:"Naive loop"}[a]}</span>`).join("");
+}
+
+function renderFailures() {
+  const box = document.getElementById("failures"), modes = Object.keys(FAIL_COLORS);
+  DATA.entries.forEach(e => { const fb = e.failure_breakdown, total = modes.reduce((s,m) => s + fb[m], 0) || 1;
+    const segs = modes.map(m => fb[m] ? `<div title="${m}: ${fb[m]} runs (${(100*fb[m]/total).toFixed(0)}%)" style="width:${100*fb[m]/total}%;background:${FAIL_COLORS[m]}"></div>` : "").join("");
+    box.insertAdjacentHTML("beforeend", `<div class="row"><div>${e.display_name}</div><div class="stack">${segs}</div><div class="ci">${total} fails</div></div>`); });
+  document.getElementById("failLegend").innerHTML = modes.map(m => `<span><b style="background:${FAIL_COLORS[m]}"></b>${m}</span>`).join("");
+}
+
+function renderHeat() {
+  const t = document.getElementById("heat"), ds = DATA.meta.domains;
+  const color = v => `hsl(${Math.round(v*130)}, 55%, ${22 + v*14}%)`;
+  t.innerHTML = "<tr><th style='text-align:left'>Configuration</th>" + ds.map(d => `<th style="text-align:center">${d}</th>`).join("") + "</tr>" +
+    DATA.entries.map(e => "<tr><td style='text-align:left;font-weight:400'>" + e.display_name + "</td>" + ds.map(d => {
+      const v = e.by_domain[d].pass_hat_k["3"].value; return `<td style="background:${color(v)}">${fmt(v)}</td>`; }).join("") + "</tr>").join("");
+}
+init();
+</script>
+</body>
+</html>
