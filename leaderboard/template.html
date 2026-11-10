@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AgentEval Leaderboard: Reliability of Tool-Using Agents</title>
+<title>AgentEval | Reliability Leaderboard for Tool-Using Agents</title>
 <style>
   :root {
     --bg: #0f1218; --panel: #171b24; --border: #262c3a; --text: #e6e9ef; --muted: #8b93a7;
@@ -13,7 +13,14 @@
   body { margin: 0; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
          background: var(--bg); color: var(--text); }
   header { padding: 28px 32px 8px; }
-  h1 { margin: 0 0 4px; font-size: 24px; }
+  h1 { margin: 0 0 4px; font-size: 24px; letter-spacing: -.01em; }
+  h1 .brand { color: var(--accent); }
+  .tagline { color: var(--text); margin: 0 0 6px; font-size: 14px; max-width: 880px; }
+  .note { color: var(--muted); font-size: 12px; margin: 10px 0 0; max-width: 980px; }
+  table.plain td.num, table.plain th.num { text-align: right; }
+  table.plain td.dim { color: #4a5266; }
+  table.plain td.top { color: var(--bad); font-weight: 600; }
+  .scroll { overflow-x: auto; }
   h2 { font-size: 16px; margin: 0 0 12px; }
   .sub { color: var(--muted); }
   .banner { margin: 12px 32px 0; padding: 10px 14px; border: 1px solid #5a4a1d; background: #2a2414;
@@ -45,7 +52,8 @@
 </head>
 <body>
 <header>
-  <h1>AgentEval Leaderboard</h1>
+  <h1><span class="brand">AgentEval</span> Leaderboard</h1>
+  <p class="tagline">Does the agent work <em>every time</em>, not just once? pass^k reliability, failure diagnosis and judge calibration for tool-using agents.</p>
   <div class="sub" id="subtitle"></div>
 </header>
 <div class="banner">
@@ -81,6 +89,20 @@
     <div class="legend" id="failLegend"></div>
   </section>
   <section class="panel full">
+    <h2>Failure taxonomy table (failed runs by mode)</h2>
+    <div class="scroll"><table class="plain" id="taxTable"></table></div>
+    <div class="note">Each cell is the share of that configuration's failed runs, with the raw run count in brackets.
+      The most common mode per row is highlighted. IGNORED_POLICY = took a forbidden action; LOOPING = repeated calls until the budget ran out;
+      GAVE_UP_EARLY = refused an achievable task; WRONG_TOOL = inappropriate tool; HALLUCINATED_ARG = right tool, invented argument;
+      HALLUCINATED_FACT = answer unsupported by tool output; PARTIAL_SUCCESS = some required changes missing; WRONG_STATE = other wrong end state.</div>
+  </section>
+  <section class="panel full">
+    <h2>pass^k by k (overall)</h2>
+    <div class="scroll"><table class="plain" id="passK"></table></div>
+    <div class="note">pass^k falls as k grows because all k trials must succeed. A large gap between pass@3 and pass^3 means the agent
+      can solve a task but not reliably.</div>
+  </section>
+  <section class="panel full">
     <h2>pass^3 by domain</h2>
     <table class="heat" id="heat"></table>
   </section>
@@ -88,9 +110,9 @@
 <footer id="footer"></footer>
 <script>
 const DATA = /*__LEADERBOARD_DATA__*/null;
-const PALETTE = ["#6ea8fe","#4cc38a","#f0b45c","#c38cf0","#f06c6c","#5cd1d6","#e889c3","#a3b85c","#8f9bb3"];
-const FAIL_COLORS = {IGNORED_POLICY:"#f06c6c",LOOPING:"#c38cf0",GAVE_UP_EARLY:"#f0b45c",WRONG_TOOL:"#5cd1d6",
-  HALLUCINATED_ARG:"#e889c3",HALLUCINATED_FACT:"#6ea8fe",PARTIAL_SUCCESS:"#a3b85c",WRONG_STATE:"#8f9bb3"};
+const PALETTE = ["#6ea8fe","#4cc38a","#f0b45c","#d9d36a","#f06c6c","#5cd1d6","#d98a5c","#a3b85c","#8f9bb3"];
+const FAIL_COLORS = {IGNORED_POLICY:"#f06c6c",LOOPING:"#d9d36a",GAVE_UP_EARLY:"#f0b45c",WRONG_TOOL:"#5cd1d6",
+  HALLUCINATED_ARG:"#d98a5c",HALLUCINATED_FACT:"#6ea8fe",PARTIAL_SUCCESS:"#a3b85c",WRONG_STATE:"#8f9bb3"};
 const AGENT_COLORS = {react:"#6ea8fe", planact:"#4cc38a", naive:"#f0b45c"};
 const fmt = v => v.toFixed(2);
 const el = (tag, attrs={}, html="") => { const e = document.createElementNS(
@@ -106,7 +128,7 @@ function init() {
   const scope = document.getElementById("scope");
   ["overall", ...m.domains].forEach(s => scope.append(new Option(s, s)));
   scope.onchange = () => renderBoard(scope.value);
-  renderBoard("overall"); renderCurve(); renderDesign(); renderFailures(); renderHeat();
+  renderBoard("overall"); renderCurve(); renderDesign(); renderFailures(); renderTaxTable(); renderPassK(); renderHeat();
 }
 
 let sortKey = "p3", sortDir = -1;
@@ -174,6 +196,24 @@ function renderFailures() {
     const segs = modes.map(m => fb[m] ? `<div title="${m}: ${fb[m]} runs (${(100*fb[m]/total).toFixed(0)}%)" style="width:${100*fb[m]/total}%;background:${FAIL_COLORS[m]}"></div>` : "").join("");
     box.insertAdjacentHTML("beforeend", `<div class="row"><div>${e.display_name}</div><div class="stack">${segs}</div><div class="ci">${total} fails</div></div>`); });
   document.getElementById("failLegend").innerHTML = modes.map(m => `<span><b style="background:${FAIL_COLORS[m]}"></b>${m}</span>`).join("");
+}
+
+function renderTaxTable() {
+  const t = document.getElementById("taxTable"), modes = Object.keys(FAIL_COLORS);
+  t.innerHTML = "<tr><th>Configuration</th>" + modes.map(m => `<th class="num">${m}</th>`).join("") + `<th class="num">Failed runs</th></tr>` +
+    DATA.entries.map(e => { const fb = e.failure_breakdown, total = modes.reduce((s,m) => s + fb[m], 0), top = Math.max(...modes.map(m => fb[m]));
+      return `<tr><td>${e.display_name}</td>` + modes.map(m => { const n = fb[m], pct = total ? (100*n/total).toFixed(0) + "%" : "-";
+        const cls = n === 0 ? "num dim" : (n === top ? "num top" : "num"); return `<td class="${cls}">${pct} <span class="ci">(${n})</span></td>`; }).join("") +
+        `<td class="num">${total}</td></tr>`; }).join("");
+}
+
+function renderPassK() {
+  const t = document.getElementById("passK"), ks = DATA.meta.ks;
+  t.innerHTML = "<tr><th>Configuration</th>" + ks.map(k => `<th class="num">pass^${k}</th>`).join("") +
+    `<th class="num">pass@3</th><th class="num">Gap (pass@3 - pass^3)</th></tr>` +
+    DATA.entries.map(e => { const o = e.overall, a = o.pass_at_k["3"].value, h = o.pass_hat_k["3"].value;
+      return `<tr><td>${e.display_name}</td>` + ks.map(k => `<td class="num">${fmt(o.pass_hat_k[String(k)].value)}</td>`).join("") +
+        `<td class="num">${fmt(a)}</td><td class="num">${fmt(a-h)}</td></tr>`; }).join("");
 }
 
 function renderHeat() {

@@ -142,6 +142,21 @@ useful part. Rules are near-perfect on structural modes (SUCCESS, LOOPING, PARTI
 **recall 0.20 on HALLUCINATED_ARG**: they mislabel those runs as HALLUCINATED_FACT. That is
 exactly the semantic distinction the hybrid design hands to a judge.
 
+## Web demo
+
+One command, standard library only (no install, no API keys):
+
+```bash
+python scripts/serve_ui.py
+```
+
+Then open **http://127.0.0.1:8768**. The page shows the sortable pass^k leaderboard with bootstrap CIs,
+the pass^k decay curves, the failure taxonomy (chart and table) and per-domain results. `GET /data` returns the
+raw `data/leaderboard_results.json`.
+
+Options: `--open` (launch the browser), `--port N`, and `--rebuild` (re-render `leaderboard/index.html` from the saved
+JSON before serving). To recompute the results from scratch, run `python scripts/generate_leaderboard.py`.
+
 ## Quickstart
 
 ```bash
@@ -242,7 +257,7 @@ every required fact, and **(3)** the policy audit log is empty.
 
 ```
 agenteval/        core package (envs, tasks, agents, harness, taxonomy, judge, metrics, reporting)
-scripts/          run_eval.py, calibrate_judge.py, generate_leaderboard.py, build_sample_data.py
+scripts/          run_eval.py, calibrate_judge.py, generate_leaderboard.py, build_sample_data.py, serve_ui.py
 leaderboard/      template.html, index.html (generated), RESULTS.md (generated)
 data/             leaderboard_results.json, sample_runs/*.jsonl, human_labels/*.jsonl + schema + report
 docs/             ARCHITECTURE.md, BLOG_POST.md
